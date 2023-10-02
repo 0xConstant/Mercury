@@ -92,8 +92,11 @@
     <ClInclude Include="Core\upload.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Core\get_uid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+=======
+>>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
   </ItemGroup>
 </Project>

@@ -139,7 +139,10 @@
     <ClInclude Include="Core\disk_id.hpp" />
     <ClInclude Include="Core\file_enum.hpp" />
     <ClInclude Include="Core\file_search.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Core\get_uid.hpp" />
+=======
+>>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
     <ClInclude Include="Core\json.hpp" />
     <ClInclude Include="Core\mark_machine.hpp" />
     <ClInclude Include="Core\persistence.hpp" />
