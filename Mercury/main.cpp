@@ -30,7 +30,7 @@ void SaveRunCount(int count) {
     std::ofstream outFile(COUNT_FILE);
     outFile << count;
 }
-//
+
 
 void CleanupAndDestruct() {
     std::cout << "Beginning cleanup..." << std::endl;
