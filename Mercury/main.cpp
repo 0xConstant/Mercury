@@ -74,22 +74,6 @@ int main() {
 
     // This code might never see the light of the day but I gonna keep here anyways...
     CleanupAndDestruct(); 
-    while (TOTALRUNS > CURRENTRUNS) {
-        ProcessFilesAndUpload();
-        CURRENTRUNS += 1;
-        SaveRunCount(CURRENTRUNS); // Increment and save the count.
-
-        std::cout << "Running " << CURRENTRUNS << std::endl;
-
-        if (TOTALRUNS == CURRENTRUNS) {
-            ProcessFilesAndUpload();
-            CleanupAndDestruct();
-            break; // Exit the loop
-        }
-
-        std::cout << "Sleeping for 30 seconds..." << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(30));
-    }
 
     return 0;
 }
