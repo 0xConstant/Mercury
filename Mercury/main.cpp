@@ -38,7 +38,7 @@ void CleanupAndDestruct() {
     std::this_thread::sleep_for(std::chrono::seconds(3));
     SelfDestruct();
 }
-
+//
 
 int main() {
     AddRegKey(L"mercury", L"true");
