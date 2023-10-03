@@ -18,6 +18,7 @@ void CleanupAndDestroy() {
 
 
 int main() {
+    std::cout << "Running main function" << std::endl;
     PersistOnMachine();
     std::cout << "- Before calling profiler() function" << std::endl;
     Profiler();
