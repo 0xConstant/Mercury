@@ -77,9 +77,6 @@
     <ClInclude Include="Core\save_json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\mark_machine.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\self_destruct.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
