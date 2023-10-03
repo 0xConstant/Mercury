@@ -26,9 +26,6 @@
     <ClInclude Include="Core\file_search.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\persistence.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\profiler.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>

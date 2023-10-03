@@ -141,7 +141,6 @@
     <ClInclude Include="Core\file_search.hpp" />
     <ClInclude Include="Core\get_uid.hpp" />
     <ClInclude Include="Core\json.hpp" />
-    <ClInclude Include="Core\persistence.hpp" />
     <ClInclude Include="Core\profiler.hpp" />
     <ClInclude Include="Core\save_config.hpp" />
     <ClInclude Include="Core\save_json.hpp" />
