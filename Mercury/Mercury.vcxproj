@@ -151,11 +151,6 @@
     <ClInclude Include="Core\upload.hpp" />
     <ClInclude Include="Core\WstrToStr.hpp" />
     <ClInclude Include="Core\zipping.hpp" />
-    <ClInclude Include="Propagation\net_discover.hpp" />
-    <ClInclude Include="Propagation\pass_spray.hpp" />
-    <ClInclude Include="Propagation\propagate.hpp" />
-    <ClInclude Include="Propagation\rdp_scan.hpp" />
-    <ClInclude Include="Propagation\subnet_scan.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -41,21 +41,6 @@
     <ClInclude Include="Communication\google_resolve.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Propagation\net_discover.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Propagation\pass_spray.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Propagation\propagate.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Propagation\rdp_scan.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Propagation\subnet_scan.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\check_perms.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
