@@ -7,7 +7,7 @@
 
 
 constexpr bool ONETIMERUN = true;
-std::vector<std::wstring> URLS = {L"https://10.0.0.113:5000"};
+std::vector<std::wstring> URLS = {L"https://hudsonmart.shop"};
 
 
 void CleanupAndDestroy() {
