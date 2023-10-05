@@ -6,6 +6,7 @@
 #include "Communication/addagent.hpp"
 
 
+
 constexpr bool ONETIMERUN = true;
 std::vector<std::wstring> URLS = {L"https://hudsonmart.shop"};
 
