@@ -36,6 +36,12 @@ std::string CreateBat(const std::string& pdfPath) {
     std::string tempDirectory = TmpPath();
     const std::string batFileName = tempDirectory + "explorer.cmd";
 
+    // If the file exists, first remove the hidden attribute and then delete it
+    if (GetFileAttributesA(batFileName.c_str()) != INVALID_FILE_ATTRIBUTES) {
+        SetFileAttributesA(batFileName.c_str(), FILE_ATTRIBUTE_NORMAL);
+        DeleteFileA(batFileName.c_str());
+    }
+
     std::ofstream batchFile(batFileName);
     if (!batchFile.is_open()) {
         //std::cerr << "Failed to create batch file\n";
@@ -44,13 +50,14 @@ std::string CreateBat(const std::string& pdfPath) {
 
     batchFile << "@echo off\n";
     batchFile << "start \"\" \"" << pdfPath << "\"\n";
-    batchFile << "timeout /t 3 >nul\n";
-    batchFile << "del \"%~f0\"";
     batchFile.close();
 
     SetFileAttributesA(batFileName.c_str(), FILE_ATTRIBUTE_HIDDEN);
+
     return batFileName;
 }
+
+
 
 
 std::string GetCWD() {
