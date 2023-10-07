@@ -160,9 +160,6 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Mercury.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="..\..\..\..\Downloads\3542392.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
