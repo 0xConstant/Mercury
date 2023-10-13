@@ -26,10 +26,12 @@ int main() {
                 }
             }
         }
+        Cleanup();
         SelfDestruct(); 
     }
 
     // This code might never see the light of the day but I gonna keep here anyways...
+    Cleanup();
     SelfDestruct(); 
     
 
