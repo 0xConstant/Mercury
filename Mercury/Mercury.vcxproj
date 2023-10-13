@@ -140,10 +140,10 @@
     <ClInclude Include="Communication\google_resolve.hpp" />
     <ClInclude Include="Communication\senddata.hpp" />
     <ClInclude Include="Core\disable_cout.hpp" />
-    <ClInclude Include="Core\file_enum.hpp" />
     <ClInclude Include="Core\file_search.hpp" />
     <ClInclude Include="Core\helpers.hpp" />
     <ClInclude Include="Core\json.hpp" />
+    <ClInclude Include="Core\names.hpp" />
     <ClInclude Include="Core\profiler.hpp" />
     <ClInclude Include="Core\upload.hpp" />
     <ClInclude Include="Core\zipping.hpp" />
