@@ -20,9 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\disk_id.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\file_search.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -38,31 +35,10 @@
     <ClInclude Include="Communication\google_resolve.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\check_perms.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\WstrToStr.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\save_output.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\special_dirs.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Communication\senddata.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\save_json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\self_destruct.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\save_config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\file_enum.hpp">
@@ -71,16 +47,10 @@
     <ClInclude Include="Core\upload.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\get_uid.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Communication\addagent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\disable_cout.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\osdp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\helpers.hpp">
