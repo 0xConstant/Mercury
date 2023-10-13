@@ -149,9 +149,6 @@
     <ClInclude Include="Core\zipping.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\Downloads\3542392.ico" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
