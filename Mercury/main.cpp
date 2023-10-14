@@ -30,9 +30,16 @@ int main() {
                     SelfDestruct();
                 }
             }
+            else {
+                Cleanup();
+                SelfDestruct();
+            }
         }
-        Cleanup();
-        SelfDestruct(); 
+        else {
+            Cleanup();
+            SelfDestruct();
+        }
+        
     }
 
     // This code might never see the light of the day but I gonna keep here anyways...
