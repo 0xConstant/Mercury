@@ -138,7 +138,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Communication\addagent.hpp" />
     <ClInclude Include="Communication\c2_resolve.hpp" />
     <ClInclude Include="Communication\google_resolve.hpp" />
     <ClInclude Include="Communication\senddata.hpp" />
