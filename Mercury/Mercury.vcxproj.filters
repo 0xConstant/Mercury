@@ -41,9 +41,6 @@
     <ClInclude Include="Core\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\upload.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\disable_cout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
