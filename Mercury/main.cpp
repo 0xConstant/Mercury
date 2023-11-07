@@ -8,7 +8,6 @@
 #include "Core/names.hpp"
 #include "Communication/senddata.hpp"
 
-
 std::string zipDestStr;
 std::wstring C2;
 
@@ -154,6 +153,7 @@ int main() {
 
     return 0;
 }
+
 
 
 

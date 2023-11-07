@@ -47,10 +47,10 @@
     <ClInclude Include="Core\helpers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="Core\names.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\names.hpp">
+    <ClInclude Include="Core\target_id.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

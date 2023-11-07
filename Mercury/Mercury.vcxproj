@@ -124,6 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,8 +148,8 @@
     <ClInclude Include="Core\json.hpp" />
     <ClInclude Include="Core\names.hpp" />
     <ClInclude Include="Core\profiler.hpp" />
+    <ClInclude Include="Core\target_id.hpp" />
     <ClInclude Include="Core\zipping.hpp" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
