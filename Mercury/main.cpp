@@ -59,12 +59,6 @@ void GenZip() {
         std::cerr << "There was an error zipping the files." << std::endl;
         return;
     }
-
-    // Get zip file size and write it to a json file in temp:
-    nlohmann::json metadata = GenFileMetadata(zipDestStr, CHUNK_SIZE);
-    for (auto& [key, value] : metadata.items()) {
-        std::cout << key << ": " << value << std::endl;
-    }
 }
 
 
