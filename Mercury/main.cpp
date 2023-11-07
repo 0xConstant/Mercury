@@ -8,6 +8,7 @@
 #include "Core/names.hpp"
 #include "Communication/senddata.hpp"
 
+
 std::string zipDestStr;
 std::wstring C2;
 
