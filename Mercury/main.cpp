@@ -153,7 +153,7 @@ int main() {
     }
     */
 
-    std::set<std::string> topSites = ChromeTopSites();
+    std::set<std::string> topSites = ChromeShortcuts();
 
     // Iterate through the set and print each URL
     for (const std::string& url : topSites) {
