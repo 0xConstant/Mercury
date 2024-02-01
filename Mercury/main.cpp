@@ -153,11 +153,20 @@ int main() {
     }
     */
 
-    if (CheckChrome()) {
-        CopyBrowserDataToTemp();
+    // Call the function and store the returned vector
+    std::vector<std::string> bookmarks = ChromeBookmarks();
+
+    // Check if the usernames vector is not empty
+    if (!bookmarks.empty()) {
+        std::cout << "Bookmarks from the database:" << std::endl;
+
+        // Loop through the vector and print each username
+        for (const std::string& bookmark : bookmarks) {
+            std::cout << bookmark << std::endl;
+        }
     }
     else {
-        std::cout << "The Chrome data directory does not exist for the current user." << std::endl;
+        std::cout << "No unique bookmarks were found or unable to open the database." << std::endl;
     }
 
     return 0;
