@@ -153,20 +153,11 @@ int main() {
     }
     */
 
-    // Call the function and store the returned vector
-    std::vector<std::string> bookmarks = ChromeBookmarks();
+    std::set<std::string> topSites = ChromeTopSites();
 
-    // Check if the usernames vector is not empty
-    if (!bookmarks.empty()) {
-        std::cout << "Bookmarks from the database:" << std::endl;
-
-        // Loop through the vector and print each username
-        for (const std::string& bookmark : bookmarks) {
-            std::cout << bookmark << std::endl;
-        }
-    }
-    else {
-        std::cout << "No unique bookmarks were found or unable to open the database." << std::endl;
+    // Iterate through the set and print each URL
+    for (const std::string& url : topSites) {
+        std::cout << url << std::endl;
     }
 
     return 0;
