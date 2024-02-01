@@ -148,6 +148,7 @@
     <ClInclude Include="Core\json.hpp" />
     <ClInclude Include="Core\names.hpp" />
     <ClInclude Include="Core\profiler.hpp" />
+    <ClInclude Include="Core\stealer.hpp" />
     <ClInclude Include="Core\target_id.hpp" />
     <ClInclude Include="Core\zipping.hpp" />
   </ItemGroup>
